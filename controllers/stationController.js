@@ -31,7 +31,20 @@ const station_list_get = async (req, res) => {
 // Get one station
 const station_get = async (req, res) => {
   try {
-    const stations = await stationModel.findById(req.params.id);
+    const stations = await stationModel
+      .findById(req.params.id)
+      .populate({
+        path: "Connections",
+        populate: { path: "ConnectionTypeID" }
+      })
+      .populate({
+        path: "Connections",
+        populate: { path: "CurrentTypeID" }
+      })
+      .populate({
+        path: "Connections",
+        populate: { path: "LevelID" }
+      });
     res.json(stations);
   } catch (e) {
     console.error("station_list_get_1", e);
